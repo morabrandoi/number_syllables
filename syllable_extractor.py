@@ -1,18 +1,31 @@
 import sys
 import math
+from matplotlib import pyplot as plt
 
+# allows for options of start and end depending how many parameters passed
 argv = sys.argv
-if len(argv) == 3:
+#creates parameters start, stop, step with defaults, 0, 10000, 1, respectively
+
+
+if (len(argv)) == 4:
     start = int(argv[1])
     end = int(argv[2])
-
+    step = int(argv[3])
+elif len(argv) == 3:
+    start = int(argv[1])
+    end = int(argv[2])
+    step = 1
 elif len(argv) == 2:
     start = 0
     end = int(argv[1])
+    step = 1
 else:
-    end = 10001
+    end = 10000
     start = 0
+    step = 1
 
+
+#word dictionaries
 places = {5: "trillion ", 4: "billion ", 3: "million ", 2: "thousand ", 1: "", 0: ""}
 numbers = {"0":"",
            "1":"one",
@@ -45,9 +58,51 @@ tens = {"2":"twenty",
         "8":"eighty",
         "9":"ninety"}
 
+#syllables dictionaries
+syllables = {"": 0,
+             " ": 0,
+             "zero": 2,
+             "one": 1,
+             "two": 1,
+             "three": 1,
+             "four": 1,
+             "five": 1,
+             "six": 1,
+             "seven": 1,
+             "eight": 1,
+             "nine": 1,
+             "ten" : 1,
+             "eleven" : 3,
+             "twelve":1,
+             "thirteen": 2,
+             "fourteen":2,
+             "fifteen":2,
+             "sixteen":2,
+             "seventeen":3,
+             "eighteen":2,
+             "nineteen":2,
+             "twenty":2,
+             "thirty": 2,
+             "fourty": 2,
+             "fifty": 2,
+             "sixty": 2,
+             "seventy":3,
+             "eighty": 2,
+             "ninety": 2,
+             "hundred": 2,
+             "thousand":2,
+             "million": 2,
+             "billion": 2,
+             "trillion":2
+             }
 
+
+
+#initializing range
 int_list = range(start,end)
+#converting numbers to strings
 str_list = [str(x) for x in int_list]
+
 
 phrase_list = []
 
@@ -104,7 +159,18 @@ for num in str_list:
             phrase += block_to_words(block) + places[sections - 1 - remaining_sections]
 
     phrase_list.append(phrase)
+# At this point phrase_list has all numbers in range as word form
+
+syllable_list = []
+for number in phrase_list:
+    sum = 0
+    number = number.split()
+    for word in number:
+        sum += syllables[word]
+    syllable_list.append(sum)
+
+# at this point syllable list has syllables for every word in range
 
 
-for el in phrase_list:
-    print(el)
+bar_graph = plt.bar(int_list, syllable_list)
+plt.show()
